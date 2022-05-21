@@ -1,4 +1,4 @@
-// Copyright Maciej Polanski
+// Copyleft Maciej Polanski
 #define _GNU_SOURCE 
 #include <sys/mman.h>
 #include <stdlib.h>
