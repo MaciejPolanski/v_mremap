@@ -1,14 +1,13 @@
 # _mremap_test.c_
 
-This example uses non-POSIX `mremap()` call to connect chunks of anonymous memory allocated with `mmap()` into a continues region. I expected this to work based on documantation avaliable. However `mremap()` operation 'grow' unexpectadly fails, most likley due to in-kernel representation (known as VM/VMA) of memory chunk.
-
-Alghorithm is as follows:
+This example uses non-POSIX `mremap()` call to connect chunks of anonymous memory allocated with `mmap()` into a continues region. I expected this to work based on documentation available. However `mremap()` operation 'grow' unexpectedly fails, most likley due to in-kernel representation (known as VM/VMA) of memory chunk.
+Algorithm is as follows:
 - Having memory A and B, grow A to (A+B) size _(possible move of A)_
 - Move B to the newly added space of A
 - Having also memory C, grow A to (A + B + C) size _(This step fails: `EFAULT 14 Bad address`)_
 - Move C to newly added part of A
 
-As 'grow' call works for a first time but second fails, I conclude that problem is that in second call memory is constructed from two separete in-kernel regions and `mremap` cannot handle such parameters.
+Since 'grow' call works the first time but dosen't work the second time, I conclude that problem is that in second call memory is constructed from two separete in-kernel regions and `mremap` cannot handle such parameter.
 
 Such diagnosis may have some support in the kernel comments, however I am not sure how to interpret `mm/mremap.c: mremap_to()`:
 ``` 
@@ -26,4 +25,4 @@ EFAULT Some address in the range old_address to
               exist mappings that cover the whole address space
               requested, but those mappings are of different types.
 ```
-Usage of plural **'mappings'** explicitly suggests that it should be possible to use an area made up of multiple mappings.
+Usage of plural **'mappings'** clearly suggests that it should be possible to use an area composed of multiple mappings.
