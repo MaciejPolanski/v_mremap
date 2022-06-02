@@ -5,8 +5,8 @@ This example uses non-POSIX `mremap()` call to connect chunks of anonymous memor
 Alghorithm is as follows:
 - Having memory A and B, grow A to (A+B) size _(possible move of A)_
 - Move B to the newly added space of A
-- Having also memory C, grow AB to (AB + C) size _(This step fails: `EFAULT 14 Bad address`)_
-- Move C to newly added part of AB
+- Having also memory C, grow A to (A + B + C) size _(This step fails: `EFAULT 14 Bad address`)_
+- Move C to newly added part of A
 
 As 'grow' call works for a first time but second fails, I conclude that problem is that in second call memory is constructed from two separete in-kernel regions and `mremap` cannot handle such parameters.
 

@@ -39,8 +39,8 @@ int main()
     void* c = mmap(NULL, size, PROT_EXEC | PROT_READ | PROT_WRITE, 
             MAP_ANONYMOUS | MAP_PRIVATE | MAP_POPULATE, /*not a file mapping*/-1, 0);
     err(c, 5);    
-    a = mremap(a, 2 * size, 3 * size, MREMAP_MAYMOVE);                   // <- this fails, code 6
-    err(a, 6);
+    a = mremap(a, 2 * size, 3 * size, MREMAP_MAYMOVE);                   // <- this fails: EFAULT 14 Bad address
+    err(a, 6);                                                           // exit code 6
     c = mremap(c, size, size, MREMAP_MAYMOVE | MREMAP_FIXED, a + 2 * size); 
     err(b, 7);
 
