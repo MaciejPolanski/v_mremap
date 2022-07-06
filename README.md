@@ -1,6 +1,6 @@
 # _mremap_test.c_
 
-This example uses non-POSIX `mremap()` call to connect chunks of anonymous memory allocated with `mmap()` into a one continues region. Based on the avaliable documantation I expected this to work properly. However `mremap()` operation 'grow' unexpectedly fails, most likley due to in-kernel representation (known as VM/VMA) of memory chunk, where one continous userspace region is still two separate VM/VMA inside a kernel.
+This example uses non-POSIX `mremap()` call to connect chunks of anonymous memory allocated with `mmap()` into a one continues region. Based on the available documentation I expected this to work properly. However `mremap()` operation 'grow' unexpectedly fails, most likely due to in-kernel representation (known as VM/VMA) of memory chunk, where one contiunous userspace region is still two separate VM/VMA inside a kernel.
 
 Algorithm is as follows:
 - Having memory A and B, grow A to (A+B) size _(move of A may happens)_
@@ -8,7 +8,7 @@ Algorithm is as follows:
 - Having also C memory, grow A to (A + B + C) size _(This step fails: `EFAULT 14 Bad address`)_
 - Move C to a newly added space at the end of A
 
-Since 'grow' call works the first time, but dosen't work at the second time, I conclude that problem in second call is that memory is constructed from two separete in-kernel regions so `mremap` cannot handle such parameter.
+Since 'grow' call works the first time, but doesn't work at the second time, I conclude that problem in second call is that memory is constructed from two separate in-kernel regions so `mremap` cannot handle such parameter.
 
 Such diagnosis may have some support in the kernel comments, however I am not sure how to interpret `mm/mremap.c: mremap_to()`:
 ``` 
